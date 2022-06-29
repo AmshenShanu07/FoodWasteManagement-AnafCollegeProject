@@ -29,9 +29,9 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="menu">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/../support">Support</a></li>
-                <li><a href="/../paymentinfo">Payment Information</a></li>
-                <li><a href="/../settings">Settings</a></li>
+                    {{!-- <li><a href="/../support">Support</a></li>
+                    <li><a href="/../order">Order</a></li>
+                    <li><a href="/../settings">Settings</a></li> --}}
                 <li role="separator" class="divider"></li>
                 <a href="/" class="btn btn-danger navbar-btn" id="btn-logout">Logout</a>
             </ul>
@@ -45,27 +45,34 @@
             <div class="panel-heading title-box">Order Summary</div>
 
             <table class="table">
+                <thead>
+                    <th>id</th>
+                    <th>Product</th>
+                    <th>Restaurant</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                </thead>
                 <tbody>
+                    {{#each orders}}
                     <tr>
-                        <td>Quantity: </td>
-                        <td id="quantity-box"></td>
+                        <td>{{_id}} </td>
+                        <td>{{productId.name}}</td>
+                        <td>{{productId.restaurant}}</td>
+                        <td>{{quantity}}</td>
+                        <td>{{productId.pricePerUnit}}</td>
+                        <td>${{total}}</td>
                     </tr>
-                    <tr>
-                        <td>Price: </td>
-                        <td id="price-box"></td>
-                    </tr>
-                    <tr>
-                        <td>Total: </td>
-                        <td id="total-box"></td>
-                    </tr>
+    
+                    {{/each}}
                 </tbody>
             </table>
         </div>
     </div>
 
-    <div class="title-box" class="panel-heading">Delivery Route</div>
+    {{!-- <div class="title-box" class="panel-heading">Delivery Route</div> --}}
     {{!-- <div id="map"></div> --}}
-    <button type="button" class="btn btn-info navbar-btn" id="btn-place-order">Confirm Order</button>
+    {{!-- <button type="button" class="btn btn-info navbar-btn" id="btn-place-order">Confirm Order</button> --}}
     
 </div>
 

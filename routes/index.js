@@ -43,9 +43,9 @@ router.post('/login',async(req,res)=>{
 
 
 
-router.post('/register',async(res,req)=>{
+router.post('/register',async(req,res)=>{
     try{
-        const {radio,firstName,lastName,username,email,password,confirmPassword,checkbox} = req.body;
+        const {radio,address,firstName,lastName,username,email,password,confirmPassword,checkbox} = req.body;
         if(password !== confirmPassword) res.send('password error');
             const user = await userQuery.createUser({
                 firstName,
@@ -53,11 +53,12 @@ router.post('/register',async(res,req)=>{
                 password,
                 email,
                 username,
+                address,
                 type:radio==='Customer'?'customer':'retailer'
             })
             res.json(user)
         }catch(err){
-            res.send(err)
+            res.json(err)
         }
 })
 

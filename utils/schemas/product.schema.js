@@ -5,14 +5,6 @@ const productSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    waitTime:{
-        type:String,
-        required:true
-    },
-    offer:{
-        type:String,
-        required:true
-    },
     price:{
         type:Number,
         required:true
@@ -27,10 +19,15 @@ const productSchema = new mongoose.Schema({
     },
     image:{
         type:String,
-        required:true
+        // required:true
+        default:""
     },
     feature:{
         type:Boolean,
+        required:true
+    },
+    restaurant:{
+        type:String,
         required:true
     },
     retailer:{

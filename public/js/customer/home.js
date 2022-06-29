@@ -18,23 +18,23 @@ function initializePage() {
     //clickFeature();
 }
 
-function clickOffer() {
-    $(".deal").on('click', function (e) {
-        e.preventDefault();
-        var companyName = $(this).find(".company-name").text() || $(this).find(".please").text();
-        var companyOffer = $(this).find(".company-offer").html() || $(this).find(".work").html();
-        location.href = "/customer/deal?name=" + companyName + "&offer=" + companyOffer;
-        if (companyOffer == "burger" && companyName == "in-n-out") {
-            console.log("Sending a Yes");
-            ga('send', 'event', 'feat', 'yes');
-        }
-        else {
-            console.log("Sending a NO");
-            ga('send','event', 'feat', 'no');
-        }
+// function clickOffer() {
+//     $(".deal").on('click', function (e) {
+//         e.preventDefault();
+//         var companyName = $(this).find(".company-name").text() || $(this).find(".please").text();
+//         var companyOffer = $(this).find(".company-offer").html() || $(this).find(".work").html();
+//         location.href = "/customer/deal?name=" + companyName + "&offer=" + companyOffer;
+//         if (companyOffer == "burger" && companyName == "in-n-out") {
+//             console.log("Sending a Yes");
+//             ga('send', 'event', 'feat', 'yes');
+//         }
+//         else {
+//             console.log("Sending a NO");
+//             ga('send','event', 'feat', 'no');
+//         }
 
-    });
-}
+//     });
+// }
 
 /*
 function clickFeature() {

@@ -62,16 +62,14 @@ app.use(logger("dev"));
 app.use(session({
     secret: 'foodaid',
     resave: true,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: { maxAge: 365 * 24 * 60 * 60 * 1000 }
 }));
-app.use(fileupload({
-    useTempFiles : true,
-    tempFileDir : '/tmp/'
-  }));
+app.use(fileupload());
 
 
 //Routing
-app.use('/',userRoute)
+app.use('/',index)
 app.use('/customer',customerRoute)
 app.use('/retailer',retailerRoute)
 
@@ -94,7 +92,7 @@ app.use('/retailer',retailerRoute)
 // });
 
 // app.get('/customer/deal', deal.view);
-// app.get('/customer/order-summary', orderSummary.view);
+// app.get('/order-summary', orderSummary.view);
 // app.get('/customer/map', map.view);
 
 // //Add retailer routes

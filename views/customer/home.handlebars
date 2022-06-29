@@ -43,9 +43,9 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="menu">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/../support">Support</a></li>
-                <li><a href="/../paymentinfo">Payment Information</a></li>
-                <li><a href="/../settings">Settings</a></li>
+                {{!-- <li><a href="/../support">Support</a></li> --}}
+                {{!-- <li><a href="/../settings">Settings</a></li> --}}
+                <li><a href="order">My Order</a></li>  
                 <li role="separator" class="divider"></li>
                 <a href="/" class="btn btn-danger navbar-btn" id="btn-logout">Logout</a>
             </ul>
@@ -55,22 +55,22 @@
 
 <div class="container">
     <div id="offers" class="row">
-        <div class="col-xs-12">
+        {{!-- <div class="col-xs-12">
             <ul class="nav nav-pills nav-justified">
                 <li role="presentation" class="active"><a class="sort" data-sort="wait-time">Wait-time</a></li>
                 <li role="presentation"><a class="sort" data-sort="company-name">Name</a></li>
                 <li role="presentation"><a class="sort" data-sort="company-offer">Offer</a></li>
             </ul>
-        </div>
-        <div class="col-xs-12">
+        </div> --}}
+        {{!-- <div class="col-xs-12">
             <input type="text" class="form-control search" placeholder="Search" />
-        </div>
+        </div> --}}
         <ul class="list">
             {{#each offers}}
                 <li>
                     <div class="col-sm-6 col-md-4">
                         {{#if feature}}
-                            <a href={{link}}>
+                            <a href="/customer/product/{{_id}}">
                                 <div class="card mid deal ftest"
                                      style="background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2)), url({{local-img}})">
                                     <h2 class="company-name">{{name}}</h2>
@@ -79,7 +79,7 @@
                             </a>
                         {{/if}}
                         {{#unless feature}}
-                        <a href={{link}}>
+                        <a href="/customer/product/{{_id}}">
                             <div class="card mid deal"
                                  style="background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2)), url({{local-img}})">
                                 <h2 class="company-name">{{name}}</h2>

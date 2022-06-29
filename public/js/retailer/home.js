@@ -6,7 +6,7 @@ function initializePage() {
     radio();
     $('#submit-btn').on('click', function (e) {
         e.preventDefault();
-        $(".form-submit-offer").attr("action", "/retailer/home").submit();
+        $(".form-submit-offer").attr("action", "/create").submit();
     })
 }
 

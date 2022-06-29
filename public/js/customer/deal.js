@@ -16,7 +16,7 @@ $(document).ready(function() {
  */
 function initializePage() {
     populateSelect();
-    submitOrder();
+    // submitOrder();
     goBack();
 }
 
@@ -31,12 +31,12 @@ function populateSelect() {
     }
 }
 
-function submitOrder() {
-    $("#btn-add-to-cart").on('click', function () {
-        storeValues(this);
-        location.href = "/customer/order-summary";
-    });
-}
+// function submitOrder() {
+//     $("#btn-add-to-cart").on('click', function () {
+//         storeValues(this);
+//         location.href = "/customer/order-summary";
+//     });
+// }
 
 function goBack() {
     $('.btn-go-back').on('click', function () {
