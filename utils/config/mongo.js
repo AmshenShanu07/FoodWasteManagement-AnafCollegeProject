@@ -5,9 +5,9 @@ const MongoConnect = async()=>{
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-  },()=>{
+
+  },(err)=>{
+    // console.log(err)
     console.info("MONGO DB CONNECTED");
     
   })

@@ -5,6 +5,7 @@ var express = require('express');
 var fileupload = require('express-fileupload');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+var session = require('express-session');
 var handlebars = require('express3-handlebars');
 var http = require('http');
 var assert = require('assert');
@@ -16,10 +17,15 @@ require('./utils/config/mongo')()
 
 // Route Functions
 var index = require('./routes/index');
-var register = require('./routes/register');
+// var register = require('./routes/register');
 var settings = require('./routes/settings');
 var support = require('./routes/support');
 var paymentinfo = require('./routes/paymentinfo');
+const userRoute = require('./routes/user.route');
+const productRoute = require('./routes/product.route');
+const orderRoute = require('./routes/order.route');
+const customerRoute = require('./routes/customer.route')
+const retailerRoute = require('./routes/retailer.route')
 
 //Customer Routes Functions
 var customerHome = require('./routes/customer/home');
@@ -37,6 +43,7 @@ var retailerConfirmation = require('./routes/retailer/confirmation');
 //JSON OBJECTS
 var users = require('./users.json');
 var offers = require('./data.json');
+const userSchema = require('./utils/schemas/user.schema');
 
 // express variable
 var app = express();
@@ -51,189 +58,123 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(logger("dev"));
+
+app.use(session({
+    secret: 'foodaid',
+    resave: true,
+    saveUninitialized: true
+}));
 app.use(fileupload({
     useTempFiles : true,
     tempFileDir : '/tmp/'
   }));
 
 
-//Re-routing to login st
-app.get('/', function (req, res) {
-    res.redirect('/login');
-});
+//Routing
+app.use('/',userRoute)
+app.use('/customer',customerRoute)
+app.use('/retailer',retailerRoute)
 
-// Add routes here
-app.get('/login', index.view);
-app.post('/login', login);
-app.get('/register', register.view);
-app.post('/register', registerNewUser);
-app.get('/settings', settings.view);
-app.get('/support', support.view);
-app.get('/paymentinfo', paymentinfo.view);
+// // Routes to see current state of database
+// app.get('/users', function(req, res) {
+//     res.send(users);
+// });
+// app.get('/offers', function(req, res) {
+//     res.send(offers);
+// });
 
-// Routes to see current state of database
-app.get('/users', function(req, res) {
-    res.send(users);
-});
-app.get('/offers', function(req, res) {
-    res.send(offers);
-});
+// // Add customer routes
+// app.get('/customer/home', function(req, res){
+//     res.render('customer/home', offers);
+// });
 
-// Add customer routes
-app.get('/customer/home', function(req, res){
-    res.render('customer/home', offers);
-});
+// app.get('/customer/home2', function(req,res){
+//   //data['showAlternate']	=	true;
+//       res.render('customer/home2', offers);
+// });
 
-app.get('/customer/home2', function(req,res){
-  //data['showAlternate']	=	true;
-  res.render('customer/home2', offers);
-});
+// app.get('/customer/deal', deal.view);
+// app.get('/customer/order-summary', orderSummary.view);
+// app.get('/customer/map', map.view);
 
-app.get('/customer/deal', deal.view);
-app.get('/customer/order-summary', orderSummary.view);
-app.get('/customer/map', map.view);
-
-//Add retailer routes
-app.get('/retailer/home', retailerHome.view);
-app.post('/retailer/home', createNewOffer);
-app.get('/retailer/options',retailerOptions.view);
-app.post('/retailer/options', addOptionsToOffer);
-app.get('/retailer/verification',retailerVerification.view);
-app.get('/retailer/confirmation', retailerConfirmation.view);
-app.get('/retailer/info', retailerInfo.view);
+// //Add retailer routes
+// app.get('/retailer/home', retailerHome.view);
+// app.post('/retailer/home', createNewOffer);
+// app.get('/retailer/options',retailerOptions.view);
+// app.post('/retailer/options', addOptionsToOffer);
+// app.get('/retailer/verification',retailerVerification.view);
+// app.get('/retailer/confirmation', retailerConfirmation.view);
+// app.get('/retailer/info', retailerInfo.view);
 
 http.createServer(app).listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));
 });
 
 
-//Helper functions
-function login(req, res) {
-    var email = req.body.email;
-    var passw = req.body.password;
-    var user = _.find(users.usersList, {'email': email, 'password': passw});
-    if(user && user.type === 'Customer') {
-        res.cookie('username', user.username);
-        res.redirect('/customer/home');
-    }
-    else if(user && user.type === 'Retailer') {
-        res.cookie('username', user.username);
-        res.redirect('/retailer/home');
-    } else if(user)
-        //alert('ERROR. User is neither Customer nor Retailer!!!');
-        console.log('ERROR. User is neither Customer nor Retailer');
-    else
-        res.redirect('/login');
-}
 
-function registerNewUser(req, res) {
-    if(checkUniqueness(req.body)) {
-        console.log('Username or email already exists. Try ' + req.body.username + '8');
-        return;
-    }
+// function createNewOffer(req, res) {
+//     if(!checkNewOfferRequest(req)) {
+//         console.log('Please fill all required fields');
+//         return;
+//     }
 
-    if(!checkNewUserRequest(req)) {
-        //console.log(req.body);
-        console.log('Please fill all required fields');
-        return;
-    }
+//     var feature;
+//     if(req.body.radio == 'YES') {
+//         var offer = _.find(offers.offers, {'feature': true});
+//         offer.feature = false;
+//         console.log(offer);
+//         feature = true;
+//     }
 
-    users.usersList.push(
-        {
-            "firstName": req.body.firstName,
-            "lastName": req.body.lastName,
-            "username": req.body.username,
-            "type": req.body.radio,
-            "email": req.body.email,
-            "password": req.body.password,
-            "id": (users.usersList.length + 1)
-        }
-    );
+//     offers.offers.push({
+//         "owner": req.body.owner,
+//         "name": req.body.name,
+//         "id": offers.offers.length + 1,
+//         "wait-time": "35-50 min",
+//         "offer": req.body.offer,
+//         "price": parseInt(req.body.price),
+//         "price-per-unit": "$" + req.body.price + ".00/" + req.body.measure,
+//         "quantity": parseInt(req.body.quantity),
+//         "img": "http://lorempixel.com/400/200/food",
+//         "local-img": "http://lorempixel.com/400/200/food",
+//         "feature": feature
+//     });
 
-    login(req, res);
-}
+//     res.cookie('offerId', offers.offers.length);
+//     res.redirect('/retailer/options');
+// }
 
-function checkUniqueness(body) {
-    return _.find(users.usersList, {'username': body.username}) ||
-        _.find(users.usersList, {'email': body.email})
-}
+// function addOptionsToOffer(req, res) {
+//     var id = parseInt(req.cookies.offerId);
+//     var offer = _.find(offers.offers, {'id': id});
 
-function checkNewUserRequest(req){
-    if(req.body.radio && req.body.firstName &&
-        req.body.lastName && req.body.username &&
-        req.body.email && req.body.password &&
-        req.body.confirmPassword && req.body.checkbox === 'on') {
+//     if(offer) {
+//         if(req.body.radCharity) {
+//             offer.donationOrg = req.body.radCharity;
+//         } else {
+//             offer.donationOrg = null;
+//         }
 
-        if(req.body.password === req.body.confirmPassword)
-            return true;
+//         if(req.body.radProfit) {
+//             offer.profitOrg = req.body.radProfit;
+//         } else {
+//             offer.profitOrg = null;
+//         }
+//     }
 
-    }
-    return false;
-}
+//     if(offer.profitOrg)
+//         res.render('retailer/confirmation', offer);
+// }
 
-function createNewOffer(req, res) {
-    if(!checkNewOfferRequest(req)) {
-        console.log('Please fill all required fields');
-        return;
-    }
-
-    var feature;
-    if(req.body.radio == 'YES') {
-        var offer = _.find(offers.offers, {'feature': true});
-        offer.feature = false;
-        console.log(offer);
-        feature = true;
-    }
-
-    offers.offers.push({
-        "owner": req.body.owner,
-        "name": req.body.name,
-        "id": offers.offers.length + 1,
-        "wait-time": "35-50 min",
-        "offer": req.body.offer,
-        "price": parseInt(req.body.price),
-        "price-per-unit": "$" + req.body.price + ".00/" + req.body.measure,
-        "quantity": parseInt(req.body.quantity),
-        "img": "http://lorempixel.com/400/200/food",
-        "local-img": "http://lorempixel.com/400/200/food",
-        "feature": feature
-    });
-
-    res.cookie('offerId', offers.offers.length);
-    res.redirect('/retailer/options');
-}
-
-function addOptionsToOffer(req, res) {
-    var id = parseInt(req.cookies.offerId);
-    var offer = _.find(offers.offers, {'id': id});
-
-    if(offer) {
-        if(req.body.radCharity) {
-            offer.donationOrg = req.body.radCharity;
-        } else {
-            offer.donationOrg = null;
-        }
-
-        if(req.body.radProfit) {
-            offer.profitOrg = req.body.radProfit;
-        } else {
-            offer.profitOrg = null;
-        }
-    }
-
-    if(offer.profitOrg)
-        res.render('retailer/confirmation', offer);
-}
-
-function checkNewOfferRequest(req){
-    if(req.body.owner && req.body.name &&
-        req.body.offer && req.body.price &&
-        req.body.measure && req.body.quantity &&
-        req.body.radio) {
-        return true;
-    }
-    return false;
-}
+// function checkNewOfferRequest(req){
+//     if(req.body.owner && req.body.name &&
+//         req.body.offer && req.body.price &&
+//         req.body.measure && req.body.quantity &&
+//         req.body.radio) {
+//         return true;
+//     }
+//     return false;
+// }
 
 /*var url = 'mongodb://localhost:27017/myproject';
 

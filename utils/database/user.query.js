@@ -2,7 +2,8 @@ const { model } = require('mongoose');
 const user = require('../schemas/user.schema')
 
 module.exports.createUser = async(data)=>{
-    const newUser = new user(data);
+
+    const newUser =await new user(data);
     return await newUser.save()
 }
 
