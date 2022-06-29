@@ -48,6 +48,9 @@ ul {
 	background: aliceblue;
 }
 
+#image{
+	display: none;
+}
 .radio {
 	margin-left: 40px;
 	margin-right: 40px;

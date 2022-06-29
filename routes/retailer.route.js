@@ -1,34 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const productQuery = require('../utils/database/product.query')
-const orderQuery = require('../utils/database/order.query')
+const {validateRetailer} = require('../utils/middlewares/global.middlewares')
 
-router.get('/home',(req,res)=>{
-    res.render('retailer/home');
-})
+const {
+    getHome,
+    createProduct,
+    getMyOrders
+} = require('../utils/controllers/retailer.controller');
 
-
-router.post('/create',async(req,res)=>{
-    // res.json(req.body)
-
-    const {name,offer,price,measure,quantity,radio,restaurant} = req.body
-    const newPrdt = {
-        name,price,quantity,restaurant,
-        feature:radio=='YES'?true:false,
-        pricePerUnit:`\$${price}/${measure}`,
-        retailer:req.session.user._id
-    }
-
-    await productQuery.addProduct(newPrdt)
-
-    res.redirect('/retailer/home')
-})
-
-router.get('/order',async(req,res)=>{
-    console.log(req.session.user._id)
-    const myOrders = await orderQuery.getRetailerOrderList(req.session.user._id);
-    res.render('customer/orderlisting',{orders:myOrders})
-})
+router.get('/home',validateRetailer,getHome);
+router.post('/create',validateRetailer,createProduct);
+router.get('/order',validateRetailer,getMyOrders);
 
 
 module.exports = router
