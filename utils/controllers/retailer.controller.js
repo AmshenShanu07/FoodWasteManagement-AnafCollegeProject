@@ -11,7 +11,7 @@ module.exports.createProduct = async(req,res)=>{
     const imgSplit = req.body.localImg.split('.')
     const ext = imgSplit[imgSplit.length - 1]
     const imgName = `${Date.now()}.${ext}`
-    fs.writeFile(`./public/products/${imgName}`, base64Data, 'base64');
+    fs.writeFile(`./public/products/${imgName}`, base64Data, 'base64',()=>{});
 
     const {name,offer,price,measure,quantity,radio,restaurant} = req.body
     const newPrdt = {

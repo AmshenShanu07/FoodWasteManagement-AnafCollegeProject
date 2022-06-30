@@ -1,23 +1,23 @@
 const express = require('express');
 const router = express.Router();
+const {validateNullUser} = require('../utils/middlewares/global.middlewares')
 const {
     getInitialPage,
     getLoginPage,
     getRegisterPage,
     loginUser,
-    createUser
+    createUser,
+    logOut
 } = require('../utils/controllers/main.controller')
 
 
 
-router.get('/',getInitialPage);
-router.get('/login',getLoginPage);
-router.get('/register',getRegisterPage);
-router.post('/login',loginUser);
-
-
-
-router.post('/register',createUser)
+router.get('/',validateNullUser,getInitialPage);
+router.get('/login',validateNullUser,getLoginPage);
+router.get('/register',validateNullUser,getRegisterPage);
+router.post('/login',validateNullUser,loginUser);
+router.get('/logout',logOut);
+router.post('/register',validateNullUser,createUser);
 
 
 

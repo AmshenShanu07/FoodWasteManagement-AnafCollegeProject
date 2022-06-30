@@ -16,7 +16,7 @@ module.exports.loginUser = async(req,res)=>{
     try{
         const {email,password} = req.body;
         const user = await userQuery.getUserByEmail(email);
-        if(!user) res.send('no user')
+        if(!user) res.redirect('/register');
         if(user.password === password){
             req.session.user = user;
             if(user.type =='customer'){
@@ -51,4 +51,10 @@ module.exports.createUser = async(req,res)=>{
         }catch(err){
             res.json(err)
         }
+}
+
+
+module.exports.logOut = (req,res)=>{
+    req.session.user = undefined;
+    res.redirect('/login')
 }
