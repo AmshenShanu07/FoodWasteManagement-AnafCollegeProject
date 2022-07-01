@@ -2,8 +2,13 @@ const productQuery = require('../database/product.query');
 const orderQuery = require('../database/order.query');
 const fs = require('fs');
 
-module.exports.getHome = (req,res)=>{
-    res.render('retailer/home');
+module.exports.getHome = async(req,res)=>{
+    const products = await productQuery.getMyProducts(req.session.user._id);
+    res.render('retailer/home', {offers:products})
+}
+
+module.exports.getAddProduct = (req,res)=>{
+    res.render('retailer/add');
 }
 
 module.exports.createProduct = async(req,res)=>{
@@ -28,7 +33,7 @@ module.exports.createProduct = async(req,res)=>{
 }
 
 module.exports.getMyOrders = async(req,res)=>{
-    console.log(req.session.user._id)
     const myOrders = await orderQuery.getRetailerOrderList(req.session.user._id);
+    console.log(myOrders)
     res.render('customer/orderlisting',{orders:myOrders})
 }

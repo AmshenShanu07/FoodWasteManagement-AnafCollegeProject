@@ -47,7 +47,7 @@ module.exports.createUser = async(req,res)=>{
                 type:radio==='Customer'?'customer':'retailer'
             })
             req.session.user = user;
-            res.redirect('/customer/home')
+            res.redirect(`/${radio==='Customer'?'customer':'retailer'}/home`)
         }catch(err){
             res.json(err)
         }

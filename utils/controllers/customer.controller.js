@@ -33,5 +33,5 @@ module.exports.createOrder = async(req,res)=>{
 
     await orderQuery.createOrder(orderDetails)
 
-    res.redirect('/customer/home')
+    res.redirect('/customer/order')
 }

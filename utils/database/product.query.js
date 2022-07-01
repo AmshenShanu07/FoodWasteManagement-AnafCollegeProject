@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const product = require('../schemas/product.schema');
 
 module.exports.addProduct = async (data)=>{
@@ -11,4 +12,8 @@ module.exports.getAllProduct = async()=>{
 
 module.exports.getSingleProduct = async(id)=>{
     return await product.findById(id).populate('retailer')
+}
+
+module.exports.getMyProducts = async(id)=>{
+    return await product.find({retailer:ObjectId(id)})
 }

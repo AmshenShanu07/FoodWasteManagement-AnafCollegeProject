@@ -47,6 +47,7 @@
             <table class="table">
                 <thead>
                     <th>id</th>
+                    <th>UserEmail</th>
                     <th>Product</th>
                     <th>Restaurant</th>
                     <th>Quantity</th>
@@ -57,6 +58,7 @@
                     {{#each orders}}
                     <tr>
                         <td>{{_id}} </td>
+                        <td>{{userId.email}}</td>
                         <td>{{productId.name}}</td>
                         <td>{{productId.restaurant}}</td>
                         <td>{{quantity}}</td>

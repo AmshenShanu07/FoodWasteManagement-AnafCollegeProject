@@ -1,15 +1,30 @@
 <!doctype html>
-
 <html>
 <head>
-	<title>CSE170 Project</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link href="/css/bootstrap/bootstrap.min.css" rel="stylesheet">
-	<link href="/css/bootstrap/bootstrap-theme.min.css" rel="stylesheet">
-	<link href="/css/retailer/home.css" rel="stylesheet">
+    <title>CSE170 Project</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="/css/customer/home.css" rel="stylesheet">
+
+    <!-- 2nd Google Analytics Content Experiment code -->
+    <script>function utmx_section(){}function utmx(){}(function(){var
+            k='133440312-2',d=document,l=d.location,c=d.cookie;
+        if(l.search.indexOf('utm_expid='+k)>0)return;
+        function f(n){if(c){var i=c.indexOf(n+'=');if(i>-1){var j=c.
+        indexOf(';',i);return escape(c.substring(i+n.length+1,j<0?c.
+                length:j))}}}var x=f('__utmx'),xx=f('__utmxx'),h=l.hash;d.write(
+                '<sc'+'ript src="'+'http'+(l.protocol=='https:'?'s://ssl':
+                        '://www')+'.google-analytics.com/ga_exp.js?'+'utmxkey='+k+
+                '&utmx='+(x?x:'')+'&utmxx='+(xx?xx:'')+'&utmxtime='+new Date().
+                valueOf()+(h?'&utmxhash='+escape(h.substr(1)):'')+
+                '" type="text/javascript" charset="utf-8"><\/sc'+'ript>')})();
+    </script><script>utmx('url','A/B');</script>
+    <!-- End of Google Analytics Content Experiment code -->
 
 </head>
+
 
 <body>
 <nav class="navbar navbar-default">
@@ -22,12 +37,15 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">FoodAid</a>
+            <a class="navbar-brand" href="/retailer/home">FoodAid</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="menu">
             <ul class="nav navbar-nav navbar-right">
+                {{!-- <li><a href="/../support">Support</a></li> --}}
+                {{!-- <li><a href="/../settings">Settings</a></li> --}}
+                <li><a href="add">Add Product</a></li> 
                 <li><a href="order">My Order</a></li>  
                 <li role="separator" class="divider"></li>
                 <a href="/logout" class="btn btn-danger navbar-btn" id="btn-logout">Logout</a>
@@ -35,70 +53,60 @@
         </div><!-- /.navbar-collapse -->
     </div>
 </nav>
+
 <div class="container">
-    <div class="form-style-10">
-        <h1>Add a Deal to Food-Aid!<span>Fill out the information about your leftover food and start selling!</span></h1>
-        <form class="form-submit-offer" method="post" action="/retailer/create">
-                    <input type="text" id="image" hidden name="image">
-            <div class="section"><span>1</span>First Name &amp; Address</div>
-            <div class="inner-wrap">
-                <label>Your Full Name<span class="required">*</span><input id="person_name" type="text" name="owner" /></label>
-                <label>Restaurant<span class="required">*</span><input id="restaurant" type="text" name="restaurant" /></label>
-            </div>
-
-            <div class="section"><span>2</span>Food &amp; Deal</div>
-            <div class="inner-wrap">
-                <label>Your Food<span class="required">*</span><input id="food" type="text" name="name" /></label>
-                <label>Your Price in $<span class="required">*</span><input id="price" type="number" name="price" /></label>
-                <label>Food Unit Metric<span class="required">*</span><input id="price-per-unit" name="measure" placeholder="lb, loaf, box, etc"type="text" name="measure" /></label>
-                <label>Quantity of Food<span class="required">*</span><input id="quantity" type="number" name="quantity" /></label>
-                <div class="btn btn-default image-preview-input">
-                    <span class="glyphicon glyphicon-folder-open"></span>
-                    <span class="image-preview-input-title">Browse</span>
-                    <input type="file" accept="image/png, image/jpeg, image/gif" onchange="encodeImageFileAsURL(event)" name="localImg"/> <!-- rename it -->
-                </div>
-            </div>
-
-            <div class="section"><span>3</span>Featured Deal</div>
-            <div class="col-sm-12">
-                <div class="row">
-                    <div class="col-xs-6">
-                        <label>
-                            <input type="radio" id="customerRadio" value="YES" name="radio" style="margin-right: 5px">Yes
-                        </label>
+    <div id="offers" class="row">
+        {{!-- <div class="col-xs-12">
+            <ul class="nav nav-pills nav-justified">
+                <li role="presentation" class="active"><a class="sort" data-sort="wait-time">Wait-time</a></li>
+                <li role="presentation"><a class="sort" data-sort="company-name">Name</a></li>
+                <li role="presentation"><a class="sort" data-sort="company-offer">Offer</a></li>
+            </ul>
+        </div> --}}
+        {{!-- <div class="col-xs-12">
+            <input type="text" class="form-control search" placeholder="Search" />
+        </div> --}}
+        <ul class="list">
+            {{#each offers}}
+                <li>
+                    <div class="col-sm-6 col-md-4">
+                        {{#if feature}}
+                            <div>
+                                <div class="card mid deal ftest"
+                                     style="background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2)), url(/products/{{image}})">
+                                    <h2 class="company-name">{{name}}</h2>
+                                    <p><span class="wait-time">{{pricePerUnit}}</span> * <span class="company-offer">{{offer}}</span></p>
+                                </div>
+                            </div>
+                        {{/if}}
+                        {{#unless feature}}
+                        <div>
+                            <div class="card mid deal"
+                                 style="background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2)), url(/products/{{image}})">
+                                <h2 class="company-name">{{name}}</h2>
+                                <p><span class="wait-time">{{pricePerUnit}}</span> * <span class="company-offer">{{offer}}</span></p>
+                            </div>
+                        </div>
+                        {{/unless}}
                     </div>
-                    <div class="col-xs-6">
-                        <label>
-                            <input type="radio" id="retailerRadio" value="NO" name="radio" style="margin-right: 5px"/>No
-                        </label>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-md-4 control-label"></label>
-                <div class="col-md-4">
-                    <button type="submit" class="btn btn-info" id="submit-btn">Submit</button>
-                </div>
-            </div>
-        </form>
+                </li>
+            {{/each}}
+        </ul>
+
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery.js"></script>
+<script src="/js/jquery-1.11.0.js"></script>
 <script src="/js/bootstrap.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-{{!-- <script src="/js/retailer/home.js"></script> --}}
+<script src="/js/customer/home.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.3.0/list.min.js"></script>
+<script type="text/javascript">
+    var options = {
+        valueNames: [ 'company-name', 'wait-time', 'company-offer' ]
+    };
+    var userList = new List('offers', options);
+</script>
 <script>
-    function encodeImageFileAsURL(e) {
-        var file = e.target.files[0];
-        var reader = new FileReader();
-        reader.onloadend = function() {
-            console.log(reader.result)
-            $('#image').val(reader.result)
-        }
-        reader.readAsDataURL(file);
-    }
-
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
                 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -107,7 +115,10 @@
     ga('create', 'UA-87196704-1', 'auto');
     ga('send', 'pageview');
 
+
 </script>
 
+
 </body>
+
 </html>
