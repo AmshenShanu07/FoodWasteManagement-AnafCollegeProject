@@ -7,6 +7,14 @@ module.exports.createUser = async(data)=>{
     return await newUser.save()
 }
 
+module.exports.getAllUsers = async()=>{
+    return await user.find({type:{$ne:'admin'}}) 
+}
+
+module.exports.delete = async(id)=>{
+    return await user.findByIdAndDelete(id);
+}
+
 module.exports.getUserByEmail = async(email)=>{
     return await user.findOne({email})
 }

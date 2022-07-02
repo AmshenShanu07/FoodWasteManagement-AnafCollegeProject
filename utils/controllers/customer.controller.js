@@ -11,7 +11,6 @@ module.exports.getSingleProduct = async(req,res)=>{
     const product = await productQuery.getSingleProduct(id);
     res.render('customer/deal',product)
 
-
 }
 
 module.exports.getOrderList = async(req,res)=>{

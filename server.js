@@ -17,9 +17,9 @@ require('./utils/config/mongo')()
 
 // Route Functions
 var index = require('./routes/index');
-const customerRoute = require('./routes/customer.route')
-const retailerRoute = require('./routes/retailer.route')
-
+const customerRoute = require('./routes/customer.route');
+const retailerRoute = require('./routes/retailer.route');
+const adminRoute = require('./routes/admin.route');
 
 
 
@@ -47,9 +47,10 @@ app.use(fileupload());
 
 
 //Routing
-app.use('/',index)
-app.use('/customer',customerRoute)
-app.use('/retailer',retailerRoute)
+app.use('/',index);
+app.use('/customer',customerRoute);
+app.use('/retailer',retailerRoute);
+app.use('/admin',adminRoute);
 
 
 http.createServer(app).listen(app.get('port'), function(){

@@ -23,7 +23,7 @@ module.exports.createProduct = async(req,res)=>{
         name,price,quantity,restaurant,
         image:imgName,
         feature:radio=='YES'?true:false,
-        pricePerUnit:`\$${price}/${measure}`,
+        pricePerUnit:`\₹${price}/${measure}`,
         retailer:req.session.user._id
     }
 

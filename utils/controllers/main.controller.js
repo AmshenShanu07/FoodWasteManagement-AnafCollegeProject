@@ -23,6 +23,8 @@ module.exports.loginUser = async(req,res)=>{
                 res.redirect('/customer/home')
             }else if(user.type == 'retailer'){
                 res.redirect('/retailer/home')
+            }else{
+                res.redirect('/admin')
             }
         }else{
             res.send('wrong password')
@@ -35,6 +37,8 @@ module.exports.loginUser = async(req,res)=>{
 
 module.exports.createUser = async(req,res)=>{
     try{
+        const isAdmin = req.session.user?.type === 'admin'
+        console.log(isAdmin)
         const {radio,address,firstName,lastName,username,email,password,confirmPassword,checkbox} = req.body;
         if(password !== confirmPassword) res.send('password error');
             const user = await userQuery.createUser({
@@ -46,8 +50,9 @@ module.exports.createUser = async(req,res)=>{
                 address,
                 type:radio==='Customer'?'customer':'retailer'
             })
-            req.session.user = user;
-            res.redirect(`/${radio==='Customer'?'customer':'retailer'}/home`)
+            req.session.user = !isAdmin?user:req.session.user;
+            isAdmin?res.redirect('/admin')
+            :res.redirect(`/${radio==='Customer'?'customer':'retailer'}/home`)
         }catch(err){
             res.json(err)
         }
